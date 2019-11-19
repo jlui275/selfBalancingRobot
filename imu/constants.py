@@ -1,0 +1,13 @@
+##Global Constants
+
+LSM6DS33_ADDR   = 0x6b      # Gyrometer / accelerometer
+
+C_FILTER_CONST  = 0.60      # Complementary filter constant
+
+# Used by the Kalman filter
+K_Q_ANGLE       = 0.01
+K_Q_GYRO        = 0.0003
+K_R_ANGLE       = 0.01
+
+# Gyroscope dps/LSB for 1000 dps full scale
+GYRO_GAIN       = 0.035
