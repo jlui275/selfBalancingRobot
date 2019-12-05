@@ -28,35 +28,33 @@ print(poll_interval)
 
 
 # PID coefficients - still need to be tuned
-KP = 20
+KP = 15
 KI = 0
 KD = 0
-startPoint = 1
-#f= open("setting.txt","r")
+startPoint = -10.85
+f= open("setting.txt","r")
 pid = PID(KP,KI, KD, setpoint=startPoint)
 pid.output_limits = (-127, 127)
 pid.proportional_on_measurement = True
-print(startPoint)
-
 # Initialize some values
 lastFusionRollX = 0.0
 Ivalue = 0.0
 orginal = 0;
 orginalX = 0;
-count = 1/0.02;
+count = 0;
 while True:
-    #if (count == 1/0.02):
-    #    count =0
-    #    f= open("setting.txt","r")
-    #    setting=f.read().split()
-    #    startPoint = float(setting[0])
-    #    KP=float(setting[1])
-    #    KI=float(setting[2])
-    #    KD=float(setting[3])
-    #    pid.setpoint= startPoint 
-    #    pid.Kp=KP
-    #    pid.Ki=KI
-    #    pid.Kd=KD
+    if (count == 1/0.02):
+        count =0
+        f= open("setting.txt","r")
+        setting=f.read().split()
+        startPoint = float(setting[0])
+        KP=float(setting[1])
+        KI=float(setting[2])
+        KD=float(setting[3])
+        pid.setpoint= startPoint 
+        pid.Kp=KP
+        pid.Ki=KI
+        pid.Kd=KD
     
     # Check if AltIMU is ready
     if altIMU.IMURead():
@@ -77,15 +75,15 @@ while True:
             # Calculate motor PWM. Divide PID by pi to normalize radians
             motorPWM = pid(fusionRollX)
            # print( motorPWM )
-            CC.MotorDrive1(motorPWM,1)
-            CC.MotorDrive2(motorPWM,1)
+           # CC.MotorDrive1(motorPWM,1)
+           # CC.MotorDrive2(motorPWM,1)
             # If integral part gets over-excited, limit to pi
             if Ivalue > pi:
                 Ivalue = pi
             if Ivalue < -pi:
                 Ivalue = -pi
             count = count +1
-            sleep(0.02*0.001)
+            sleep(0.02)
         else:
             orginal = 1
             
